@@ -1,0 +1,9 @@
+.DS_Store
+.flaskenv
+*.pyc
+*.pyo
+venv/
+.cache/
+.pytest_cache/
+.idea/
+__pycache__
