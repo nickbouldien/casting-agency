@@ -27,6 +27,14 @@ run migrations
 TODO 
 ```
 
+### Start dev server
+(using port 8080 here)
+```bash
+export FLASK_APP=src/app.py
+export FLASK_ENV=development
+flask run -h localhost -p 8080
+```
+
 ### API Endpoints
 GET 
 /actors
