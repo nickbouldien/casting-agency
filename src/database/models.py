@@ -84,3 +84,5 @@ class Actor(db.Model):
     def __repr__(self):
         return f'<Actor {self.id} {self.name}>'
 
+
+# TODO - create model for actors_for_movie

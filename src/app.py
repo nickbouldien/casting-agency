@@ -24,6 +24,7 @@ def index():
 
 
 @APP.route('/api/movies', methods=['GET'])
+# @requires_auth('get:movies')
 def movies():
     sample_movies = [
         {
@@ -45,6 +46,28 @@ def movies():
     return jsonify({
         "success": True,
         "movies": sample_movies
+    })
+
+
+@APP.route('/api/movies/<int:id>/details', methods=['GET'])
+# @requires_auth('get:movies')
+def movie_details(id):
+    # TODO - implement
+    sample_movie = {
+        "id": 2,
+        "title": "movie2",
+        "release_date": "now",  # FIXME
+        # other fields ...
+    }
+
+    # m = Movie.query.get_or_404(id)
+    #
+    # print("found movie: ", m)
+
+    return jsonify({
+        "success": True,
+        "movie": sample_movie,
+        # "movie": m.long()
     })
 
 
