@@ -1,7 +1,6 @@
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 from flask_moment import Moment
-import json
 from .database import setup_db
 from .database.models import Actor, Movie
 
@@ -14,6 +13,8 @@ def create_app(test_config=None):
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     moment = Moment(app)
 
+    print(app.error_handler_spec)
+
     return app
 
 
@@ -22,7 +23,10 @@ APP = create_app()
 
 @APP.route('/', methods=['GET'])
 def index():
-    return 'index route'
+    return jsonify({
+        'success': True,
+        'message': ""
+    })
 
 
 """
@@ -33,17 +37,6 @@ def index():
 @APP.route('/api/movies', methods=['GET'])
 # @requires_auth('get:movies')
 def movies():
-    # sample_movies = [
-    #     {
-    #         "id": 1,
-    #         "title": "movie1"
-    #     },
-    #     {
-    #         "id": 2,
-    #         "title": "movie2"
-    #     }
-    # ]
-
     all_movies = Movie.query.order_by(Movie.release_date.desc()).all()
 
     print("all_movies: ", all_movies)
@@ -57,17 +50,7 @@ def movies():
 @APP.route('/api/movies/<int:id>/details', methods=['GET'])
 # @requires_auth('get:movies')
 def movie_details(id):
-    # TODO - implement
-    # sample_movie = {
-    #     "id": 2,
-    #     "title": "movie2",
-    #     "release_date": "now",  # FIXME
-    #     # other fields ...
-    # }
-
     m = Movie.query.get_or_404(id)
-
-    print("found movie: ", m)
 
     return jsonify({
         "success": True,
@@ -118,11 +101,7 @@ def create_movie():
 @APP.route('/api/movies/<int:id>', methods=["PATCH"])
 # @requires_auth('patch:movies')
 def update_movie(id):
-    # m = Movie.query.filter(Movie.id == id).one_or_none()
     m = Movie.query.get_or_404(id)
-
-    # if m is None:
-    #     abort(404)
 
     try:
         # update the fields of the desired movie
@@ -149,10 +128,6 @@ def update_movie(id):
 # @requires_auth('delete:movies')
 def delete_movie(id):
     m = Movie.query.get_or_404(id)
-
-    # m = Movie.query.filter(Movie.id == id).one_or_none()
-    # if m is None:
-    #     abort(404)
 
     try:
         m.delete()
