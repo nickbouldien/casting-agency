@@ -39,7 +39,7 @@ class Movie(db.Model):
         db.session.commit()
 
     def __repr__(self):
-        return f'<Movie {self.id} {self.name}>'
+        return f'<Movie {self.id} {self.title}>'
 
 
 class Actor(db.Model):

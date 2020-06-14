@@ -9,21 +9,12 @@ class AuthError(Exception):
         self.status_code = status_code
 
 
-@APP.errorhandler(422)
-def unprocessable(error):
-    return jsonify({
-        "success": False,
-        "error": 422,
-        "message": "unprocessable"
-    }), 422
-
-
 @APP.errorhandler(404)
-def not_found(error):
+def not_found(error_message):
     return jsonify({
         "success": False,
         "error": 404,
-        "message": "resource not found"
+        "message": error_message if error_message else "resource not found"
     }), 404
 
 
@@ -34,6 +25,15 @@ def not_allowed(error):
         'error': 405,
         'message': 'Method not allowed.'
     }), 405
+
+
+@APP.errorhandler(422)
+def unprocessable(error):
+    return jsonify({
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+    }), 422
 
 
 @APP.errorhandler(500)
