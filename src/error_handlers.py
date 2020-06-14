@@ -1,12 +1,6 @@
 from flask import jsonify
 from .app import APP
-
-
-# TODO - move to the auth dir
-class AuthError(Exception):
-    def __init__(self, error, status_code):
-        self.error = error
-        self.status_code = status_code
+from .auth.auth import AuthError
 
 
 @APP.errorhandler(404)
