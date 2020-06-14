@@ -1,6 +1,6 @@
 from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+from flask_moment import Moment
 import json
 from .database import setup_db
 from .database.models import Actor, Movie
@@ -11,6 +11,7 @@ def create_app(test_config=None):
     setup_db(app)
     # CORS(app)
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    moment = Moment(app)
 
     return app
 
@@ -37,15 +38,12 @@ def movies():
     #     }
     # ]
 
-    # TODO - implement
     all_movies = Movie.query.all()
     print("all_movies: ", all_movies)
 
-    ms = [m.short() for m in all_movies]
-
     return jsonify({
         "success": True,
-        "movies": ms
+        "movies": [m.short() for m in all_movies]
     })
 
 
@@ -53,28 +51,26 @@ def movies():
 # @requires_auth('get:movies')
 def movie_details(id):
     # TODO - implement
-    sample_movie = {
-        "id": 2,
-        "title": "movie2",
-        "release_date": "now",  # FIXME
-        # other fields ...
-    }
+    # sample_movie = {
+    #     "id": 2,
+    #     "title": "movie2",
+    #     "release_date": "now",  # FIXME
+    #     # other fields ...
+    # }
 
-    # m = Movie.query.get_or_404(id)
-    #
-    # print("found movie: ", m)
+    m = Movie.query.get_or_404(id)
+
+    print("found movie: ", m)
 
     return jsonify({
         "success": True,
-        "movie": sample_movie,
-        # "movie": m.long()
+        "movie": m.long()
     })
 
 
 @APP.route('/api/movies', methods=['POST'])
 # @requires_auth('post:drinks')
-def create_movie(payload):
-    # TODO - implement
+def create_movie():
     body = request.get_json()
 
     req_title = body.get('title', None)
@@ -88,12 +84,20 @@ def create_movie(payload):
         print('req_release_date is None')
         abort(422)
 
+    website = body.get('website', "")
+    image_link = body.get('imageLink', "")
+
     try:
-        movie = Movie(title=req_title, release_date=req_release_date)
+        movie = Movie(
+            title=req_title,
+            release_date=req_release_date,
+            image_link=image_link,
+            website=website
+        )
         movie.insert()
         return jsonify({
             "success": True,
-            "movies": movie
+            "movie_id": movie.id
         })
     except Exception as e:
         print("POST /movies error => ", e)
@@ -101,17 +105,17 @@ def create_movie(payload):
         return jsonify({
             'success': False,
             'message': "The movie is not formatted correctly. Please try again."
-        })
+        }), 422
 
 
 @APP.route('/api/movies/<int:id>', methods=["PATCH"])
 # @requires_auth('patch:movies')
-def update_movie(payload, id):
-    # TODO - use the normal query (get_or_404 ??)
-    m = Movie.query.filter(Movie.id == id).one_or_none()
+def update_movie(id):
+    # m = Movie.query.filter(Movie.id == id).one_or_none()
+    m = Movie.query.get_or_404(id)
 
-    if m is None:
-        abort(404)
+    # if m is None:
+    #     abort(404)
 
     try:
         # update the fields of the desired movie
@@ -119,37 +123,56 @@ def update_movie(payload, id):
         print("PATCH /movies: ", body)
 
         m.title = body.get('title', m.title)
+        m.release_date = body.get('releaseDate', m.release_date)
+        m.image_link = body.get('imageLink', m.image_link)
+        m.website = body.get('website', m.website)
 
-        # TODO
-        # m.update()
+        m.update()
 
         return jsonify({
             "success": True,
-            "movies": [],
-            # "movies": [m.long()]
+            "movie": m.long()
         })
     except Exception as e:
         print("PATCH /movies/<id> error => ", e)
-
         abort(422)
 
 
 @APP.route('/api/movies/<int:id>', methods=["DELETE"])
 # @requires_auth('delete:movies')
-def delete_drink(payload, id):
-    m = Movie.query.filter(Movie.id == id).one_or_none()
+def delete_movie(id):
+    m = Movie.query.get_or_404(id)
 
-    if m is None:
-        abort(404)
+    # m = Movie.query.filter(Movie.id == id).one_or_none()
+    # if m is None:
+    #     abort(404)
 
     try:
         m.delete()
 
-        return jsonify({"success": True, "delete_id": id})
+        return jsonify({"success": True, "deleted_id": id})
     except Exception as e:
-        print("error: could not delete the movie => ", e)
-
+        print("DELETE /movies/<id> error => ", e)
         abort(500)
+
+
+# @APP.route('/api/movies/search', methods=['POST'])
+# # @requires_auth('get:movies')  # using the same permission as GET movies
+# def search_movies():
+#     search_term = request.form.get("search_term", "")  # .lower()
+#
+#     matching_movies = Movie.query.filter(Movie.title.ilike("%" + search_term + "%")).all()
+#
+#     print("matching movies: ", matching_movies)
+#
+#     if matching_movies is None:
+#         abort(404, f"no results found for search term '{search_term}'")
+#
+#     return jsonify({
+#         "success": True,
+#         "count": len(matching_movies),
+#         "data": [m.short() for m in matching_movies]
+#     })
 
 
 if __name__ == '__main__':

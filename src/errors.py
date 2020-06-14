@@ -19,11 +19,11 @@ def unprocessable(error):
 
 
 @APP.errorhandler(404)
-def not_found(error):
+def not_found(error_message):
     return jsonify({
         "success": False,
         "error": 404,
-        "message": "resource not found"
+        "message": error_message if error_message else "resource not found"
     }), 404
 
 

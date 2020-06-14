@@ -24,7 +24,6 @@ $ createdb casting_agency_dev
 
 run migrations
 ```bash
-TODO 
 $ flask db init --directory src/migrations/
 $ flask db migrate --directory src/migrations/
 $ flask db upgrade --directory src/migrations/
