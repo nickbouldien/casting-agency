@@ -5,7 +5,7 @@ class Movie(db.Model):
     __tablename__ = 'movies'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120))
+    title = db.Column(db.String(120), nullable=False)
     release_date = db.Column(db.DateTime, nullable=False)
     image_link = db.Column(db.String(500), nullable=True)
     website = db.Column(db.String(120), nullable=True)
@@ -34,7 +34,8 @@ class Movie(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def update(self):
+    @staticmethod
+    def update():
         db.session.commit()
 
     def __repr__(self):
@@ -45,9 +46,9 @@ class Actor(db.Model):
     __tablename__ = 'actors'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    age = db.Column(db.Integer)
-    gender = db.Column(db.String(20))
+    name = db.Column(db.String, nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    gender = db.Column(db.Enum('M', 'F', name="gender"), nullable=False)
     phone = db.Column(db.String(120), nullable=True)
     image_link = db.Column(db.String(500), nullable=True)
     website = db.Column(db.String(120), nullable=True)
@@ -78,7 +79,8 @@ class Actor(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def update(self):
+    @staticmethod
+    def update():
         db.session.commit()
 
     def __repr__(self):

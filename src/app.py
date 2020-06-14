@@ -8,7 +8,7 @@ from .database.models import Actor, Movie
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    # setup_db(app)
+    setup_db(app)
     # CORS(app)
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
@@ -26,26 +26,26 @@ def index():
 @APP.route('/api/movies', methods=['GET'])
 # @requires_auth('get:movies')
 def movies():
-    sample_movies = [
-        {
-            "id": 1,
-            "title": "movie1"
-        },
-        {
-            "id": 2,
-            "title": "movie2"
-        }
-    ]
+    # sample_movies = [
+    #     {
+    #         "id": 1,
+    #         "title": "movie1"
+    #     },
+    #     {
+    #         "id": 2,
+    #         "title": "movie2"
+    #     }
+    # ]
 
     # TODO - implement
-    # all_movies = Movie.query.all()
-    # print("all_movies: ", all_movies)
+    all_movies = Movie.query.all()
+    print("all_movies: ", all_movies)
 
-    # ms = [m.short() for m in all_movies]
+    ms = [m.short() for m in all_movies]
 
     return jsonify({
         "success": True,
-        "movies": sample_movies
+        "movies": ms
     })
 
 
