@@ -29,24 +29,30 @@ class SetupTestCase(unittest.TestCase):
 
         setup_db(self.app)
 
-        # for rule in self.app.url_map.iter_rules():
-        #     print("rule: ", rule)
-
         # binds the app to the current context
         # ctx = self.app.app_context()
         # ctx.push()
+
+        # basic setup for use in other tests
+        self.movie = {
+            'title': 'star wars',
+            'releaseDate': '1977-05-25T21:45:23Z',
+            'imageLink': "https://www.example.com/starwars/image",
+            'website': "https://www.example.com/starwars"
+        }
+
+        self.movie_2 = {
+            'title': 'star wars episode 5',
+            'releaseDate': '1980-05-17T21:45:23Z',
+            'imageLink': "https://www.example.com/starwars2/image",
+            'website': "https://www.example.com/starwars2"
+        }
 
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
             # create all tables
             self.db.create_all()
-
-        # basic setup for use in other tests
-        # self.new_movie = {
-        #     'question': 'Who was the first president of the US?',
-        #     'answer': 'George Washington',
-        # }
 
     def tearDown(self):
         """Executed after each test"""
