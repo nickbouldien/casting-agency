@@ -1,0 +1,209 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.2
+-- Dumped by pg_dump version 11.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: gender; Type: TYPE; Schema: public; Owner: nick
+--
+
+CREATE TYPE public.gender AS ENUM (
+    'M',
+    'F'
+);
+
+
+ALTER TYPE public.gender OWNER TO nick;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: actors; Type: TABLE; Schema: public; Owner: nick
+--
+
+CREATE TABLE public.actors (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    age integer NOT NULL,
+    gender public.gender NOT NULL,
+    phone character varying(120),
+    image_link character varying(500),
+    website character varying(120)
+);
+
+
+ALTER TABLE public.actors OWNER TO nick;
+
+--
+-- Name: actors_id_seq; Type: SEQUENCE; Schema: public; Owner: nick
+--
+
+CREATE SEQUENCE public.actors_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.actors_id_seq OWNER TO nick;
+
+--
+-- Name: actors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: nick
+--
+
+ALTER SEQUENCE public.actors_id_seq OWNED BY public.actors.id;
+
+
+--
+-- Name: alembic_version; Type: TABLE; Schema: public; Owner: nick
+--
+
+CREATE TABLE public.alembic_version (
+    version_num character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.alembic_version OWNER TO nick;
+
+--
+-- Name: movies; Type: TABLE; Schema: public; Owner: nick
+--
+
+CREATE TABLE public.movies (
+    id integer NOT NULL,
+    title character varying(120) NOT NULL,
+    release_date timestamp without time zone NOT NULL,
+    image_link character varying(500),
+    website character varying(120)
+);
+
+
+ALTER TABLE public.movies OWNER TO nick;
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE; Schema: public; Owner: nick
+--
+
+CREATE SEQUENCE public.movies_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.movies_id_seq OWNER TO nick;
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: nick
+--
+
+ALTER SEQUENCE public.movies_id_seq OWNED BY public.movies.id;
+
+
+--
+-- Name: actors id; Type: DEFAULT; Schema: public; Owner: nick
+--
+
+ALTER TABLE ONLY public.actors ALTER COLUMN id SET DEFAULT nextval('public.actors_id_seq'::regclass);
+
+
+--
+-- Name: movies id; Type: DEFAULT; Schema: public; Owner: nick
+--
+
+ALTER TABLE ONLY public.movies ALTER COLUMN id SET DEFAULT nextval('public.movies_id_seq'::regclass);
+
+
+--
+-- Data for Name: actors; Type: TABLE DATA; Schema: public; Owner: nick
+--
+
+COPY public.actors (id, name, age, gender, phone, image_link, website) FROM stdin;
+2	actor two	33	F	123-123-8979	http://www.aomsdflaskfdj.comf/asdlfkasjdf98/asdflkjf	http://www.example.com/laksdfsaf
+3	jim parsons	37	M	123-123-8979	http://www.aomsdflaskfdj.comf/asdlfkasjdf98/asdflkjf	http://www.example.com/laksdfsaf
+1	johnny parsons	31	M	982-123-8979	http://www.aomsdflaskfdj.comf/johnnyp	http://www.example.com/laksdfsaf
+\.
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: nick
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+6b08dd6c8be1
+\.
+
+
+--
+-- Data for Name: movies; Type: TABLE DATA; Schema: public; Owner: nick
+--
+
+COPY public.movies (id, title, release_date, image_link, website) FROM stdin;
+1	movie 1	2017-09-28 21:45:23		
+2	movie 1	2017-09-28 21:45:23		
+4	thriller 2	2018-11-28 21:45:23	http://www.aomsdflaskfdj.comf/asdlfkasjdf98/asdflkjf	http://www.example.com
+5	thriller 3	2018-11-28 21:45:23	http://www.aomsdflaskfdj.comf/asdlfkasjdf98/asdflkjf	http://www.example.com
+6	star wars 71	2010-07-28 21:45:23	http://www.aomsdflaskfdj.comf/asdlfkasjdf98/asdflkjf	http://www.starwars.com
+\.
+
+
+--
+-- Name: actors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: nick
+--
+
+SELECT pg_catalog.setval('public.actors_id_seq', 4, true);
+
+
+--
+-- Name: movies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: nick
+--
+
+SELECT pg_catalog.setval('public.movies_id_seq', 6, true);
+
+
+--
+-- Name: actors actors_pkey; Type: CONSTRAINT; Schema: public; Owner: nick
+--
+
+ALTER TABLE ONLY public.actors
+    ADD CONSTRAINT actors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: alembic_version alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: nick
+--
+
+ALTER TABLE ONLY public.alembic_version
+    ADD CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num);
+
+
+--
+-- Name: movies movies_pkey; Type: CONSTRAINT; Schema: public; Owner: nick
+--
+
+ALTER TABLE ONLY public.movies
+    ADD CONSTRAINT movies_pkey PRIMARY KEY (id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+

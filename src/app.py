@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_moment import Moment
 from .database import setup_db
-
+from .error_handlers import errors_blueprint
 from .api.actor_routes import actor_blueprint
 from .api.movie_routes import movie_blueprint
 
@@ -26,6 +26,9 @@ APP = create_app()
 APP.register_blueprint(actor_blueprint)
 APP.register_blueprint(movie_blueprint)
 
+# register the custom error handlers
+APP.register_blueprint(errors_blueprint)
+
 
 @APP.route('/', methods=['GET'])
 def index():
@@ -35,8 +38,8 @@ def index():
     })
 
 
-for rule in APP.url_map.iter_rules():
-    print("rule: ", rule)
+# for rule in APP.url_map.iter_rules():
+#     print("rule: ", rule)
 
 if __name__ == '__main__':
     # TODO

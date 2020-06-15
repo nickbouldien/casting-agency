@@ -1,47 +1,19 @@
 import json
 import unittest
-from flask_sqlalchemy import SQLAlchemy
-from src.app import create_app
-from src.database import setup_db
-from src.database.models import Actor, Movie
+
+from src.database.models import Movie
 from src.tests.test_setup import SetupTestCase
 
 
 class MoviesTestCase(SetupTestCase):
     """This class represents the casting agency test case"""
 
-    # def setUp(self):
-    #     """Define test variables and initialize app."""
-    #     self.app = create_app()
-    #     self.client = self.app.test_client
-    #     self.database_name = "casting_agency_test"
-    #     self.database_path = f"postgres://localhost:5432/{self.database_name}"
-    #     setup_db(self.app, self.database_path)
-    #
-    #     # binds the app to the current context
-    #     with self.app.app_context():
-    #         self.db = SQLAlchemy()
-    #         self.db.init_app(self.app)
-    #         # create all tables
-    #         self.db.create_all()
-    #
-    #     # self.new_movie = {
-    #     #     'question': 'Who was the first president of the US?',
-    #     #     'answer': 'George Washington',
-    #     # }
-    #
-    # def tearDown(self):
-    #     """Executed after each test"""
-    #     pass
-
     # GET '/api/movies'
     def test_get_paginated_movies(self):
         """Tests movies success"""
         response = self.client.get('/api/movies')
-        print("response: ", response)
 
         data = json.loads(response.data)
-        print("data: ", data)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -67,18 +39,29 @@ class MoviesTestCase(SetupTestCase):
     #     self.assertEqual(data['success'], False)
 
     # GET '/api/movies/<id>/details'
-    # def test_404_invalid_page(self):
-    #     """Tests the movie details endpoint success"""
-    #     movie_id = 1
-    #
-    #     response = self.client().get(f'/api/movies/{movie_id}/details')
-    #
-    #     data = json.loads(response.data)
-    #
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertEqual(data['message'], 'Not found')
-    #     self.assertEqual(data['success'], False)
-    #
+    def test_movie_details_success(self):
+        """Tests the movie details endpoint success"""
+        movie_id = 1
+
+        response = self.client.get(f'/api/movies/{movie_id}/details')
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    # GET '/api/movies/<id>/details'
+    def test_movie_details_404(self):
+        """Tests the movie details endpoint 404"""
+        movie_id = 10000
+
+        response = self.client.get(f'/api/movies/{movie_id}/details')
+
+        data = json.loads(response.data)
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data['message'], "resource not found")
+        self.assertEqual(data['success'], False)
 
     # # POST '/api/questions'
     # def test_create_question(self):

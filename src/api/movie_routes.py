@@ -13,7 +13,6 @@ movie_blueprint = Blueprint('movie_blueprint', __name__)
 @movie_blueprint.route('/api/movies', methods=['GET'])
 # @requires_auth('get:movies')
 def movies():
-    print("called")
     # TODO - add pagination
     all_movies = Movie.query.order_by(Movie.release_date.desc()).all()
 
@@ -31,7 +30,11 @@ def movies():
 @movie_blueprint.route('/api/movies/<int:id>/details', methods=['GET'])
 # @requires_auth('get:movies')
 def movie_details(id):
-    m = Movie.query.get_or_404(id)
+    m = Movie.query.get(id)
+
+    if m is None:
+        print("m is None - aborting with 404")
+        abort(404)
 
     return jsonify({
         "success": True,
