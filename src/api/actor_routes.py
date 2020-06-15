@@ -1,6 +1,7 @@
 from flask import Blueprint, request, abort, jsonify
 
 from ..database.models import Actor
+from ..utils import check_valid_age
 
 actor_blueprint = Blueprint('actor_blueprint', __name__)
 
@@ -15,11 +16,12 @@ actor_blueprint = Blueprint('actor_blueprint', __name__)
 def actors():
     all_actors = Actor.query.order_by(Actor.name.desc()).all()
 
-    print("all_actors: ", all_actors)
+    actors_array = [a.short() for a in all_actors]
 
     return jsonify({
         "success": True,
-        "actors": [a.short() for a in all_actors]
+        "actors": actors_array,
+        "total_actors": len(actors_array),
     })
 
 
@@ -49,19 +51,9 @@ def create_actor():
         print('req_name is required')
         abort(422, 'req_name is required')
 
-    if req_age is None:
-        print('req_age is required')
-        abort(422, 'req_age is required')
-    else:
-        if type(req_age) is str:
-            try:
-                req_age = int(req_age)
-                print("req_age after casting to int: ", req_age)
-            except Exception as e:
-                print('req_gender error ', e)
-                abort(422, 'req_age must be an integer larger than 0')
-        if req_age < 0:
-            abort(422, 'req_age must be an integer larger than 0')
+    valid_age = check_valid_age(req_age)
+    if not valid_age:
+        abort(422, 'age must be an integer larger than 0')
 
     if req_gender is None or req_gender == "":
         print('req_gender is required')
@@ -104,9 +96,14 @@ def update_actor(id):
         body = request.get_json()
         print("PATCH /actors: ", body)
 
+        req_age = body.get('age', a.age)
+
+        valid_age = check_valid_age(req_age)
+        if not valid_age:
+            abort(422, 'age must be an integer larger than 0')
+
         a.name = body.get('name', a.name)
-        a.age = body.get('age', a.age)
-        a.gender = body.get('gender', a.gender)
+        a.age = req_age
         a.image_link = body.get('imageLink', a.image_link)
         a.website = body.get('website', a.website)
         a.phone = body.get('phone', a.phone)

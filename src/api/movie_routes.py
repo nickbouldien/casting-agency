@@ -30,11 +30,7 @@ def movies():
 @movie_blueprint.route('/api/movies/<int:id>/details', methods=['GET'])
 # @requires_auth('get:movies')
 def movie_details(id):
-    m = Movie.query.get(id)
-
-    if m is None:
-        print("m is None - aborting with 404")
-        abort(404)
+    m = Movie.query.get_or_404(id)
 
     return jsonify({
         "success": True,

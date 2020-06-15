@@ -5,7 +5,7 @@ from src.tests.test_setup import SetupTestCase
 
 
 class MoviesTestCase(SetupTestCase):
-    """This class represents the casting agency test case"""
+    """This class represents the movie test cases"""
 
     # GET '/api/movies'
     def test_get_paginated_movies(self):
@@ -91,7 +91,7 @@ class MoviesTestCase(SetupTestCase):
     def test_create_movie_failure(self):
         """Tests movie creation failure"""
 
-        # get number of movies before post
+        # get the movies before the post request to create a new movie
         movies_prior = Movie.query.all()
 
         invalid_data = {}

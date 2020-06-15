@@ -48,6 +48,24 @@ class SetupTestCase(unittest.TestCase):
             'website': "https://www.example.com/starwars2"
         }
 
+        self.actor = {
+            'name': 'monica santana',
+            'age': 34,
+            'gender': "F",
+            'imageLink': "https://www.example.com/monica/image",
+            'phone': "123456789",
+            'website': "https://www.example.com/monica"
+        }
+
+        self.actor_2 = {
+            'name': 'joe rodriguez',
+            'age': 39,
+            'gender': "M",
+            'imageLink': "https://www.example.com/joe/image",
+            'phone': "987654321",
+            'website': "https://www.example.com/joe"
+        }
+
         with self.app.app_context():
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
@@ -61,7 +79,6 @@ class SetupTestCase(unittest.TestCase):
     def test_setup_sanity_check(self):
         """sanity check making sure the test setup is successful"""
         self.assertEqual(2, 2)
-
         self.assertTrue(True)
 
 
