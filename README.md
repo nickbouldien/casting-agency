@@ -37,6 +37,18 @@ export FLASK_ENV=development
 flask run -h localhost -p 8080
 ```
 
+### Running tests
+```bash
+$ dropdb casting_agency_test
+$ createdb casting_agency_test
+
+@TODO - add the psql dump file to quickly load mock data 
+$ psql casting_agency_test < src/database/casting_agency_test_db.psql
+$ source setup_tests.sh
+$ python3 -m unittest -v test_app.py
+```
+
+
 ### API Endpoints
 GET 
 /actors
