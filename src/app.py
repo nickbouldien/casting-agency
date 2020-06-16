@@ -15,8 +15,6 @@ def create_app(test_config=None):
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     moment = Moment(app)
 
-    print(app.error_handler_spec)
-
     return app
 
 

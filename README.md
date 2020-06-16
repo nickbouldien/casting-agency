@@ -48,19 +48,44 @@ $ python3 -m unittest -v test_app.py
 ```
 
 
-### API Endpoints
-GET 
-/actors
-/movies
+## API Endpoints
+### Overview
+  * GET
+    * /actors
+    * /movies
+    * /actors/{int:actor_id}
+    * /movies/{int:movie_id}
+    * /actors/{int:actor_id}/details
+    * /movies/{int:movie_id}/details
+  * POST
+    * /actors
+    * /movies
+  * PATCH
+    * /actors/{int:actor_id}
+    * /movies/{int:movie_id}
+  * DELETE
+    * /actors/{int:actor_id}
+    * /movies/{int:movie_id}k
 
-DELETE
-/actors/
-/movies/
+### Detailed Information / Examples
 
-POST
-/actors
-/movies
 
-PATCH
-/actors/
-/movies/
+
+## Authentication and RBAC information
+### roles
+There are three roles:
+- assistant
+- director
+- producer
+
+the assistant can:
+get the movies and actors
+
+the director can:
+get/create/update/delete the actors, get/update the movies
+
+the producer can:
+get/create/update/delete the actors, get/create/update/delete the movies
+
+
+### hosting directions
