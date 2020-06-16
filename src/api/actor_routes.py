@@ -1,5 +1,6 @@
 from flask import Blueprint, request, abort, jsonify
 
+from ..auth.auth import requires_auth
 from ..database.models import Actor
 from ..utils import check_valid_age
 
@@ -12,8 +13,8 @@ actor_blueprint = Blueprint('actor_blueprint', __name__)
 
 
 @actor_blueprint.route('/api/actors', methods=['GET'])
-# @requires_auth('get:actors')
-def actors():
+@requires_auth('get:actors')
+def actors(payload):
     all_actors = Actor.query.order_by(Actor.name.desc()).all()
 
     actors_array = [a.short() for a in all_actors]
@@ -26,8 +27,8 @@ def actors():
 
 
 @actor_blueprint.route('/api/actors/<int:id>/details', methods=['GET'])
-# @requires_auth('get:actors')
-def actor_details(id):
+@requires_auth('get:actors')
+def actor_details(payload, id):
     a = Actor.query.get_or_404(id)
 
     print("found actor: ", a)
@@ -39,8 +40,8 @@ def actor_details(id):
 
 
 @actor_blueprint.route('/api/actors', methods=['POST'])
-# @requires_auth('post:actors')
-def create_actor():
+@requires_auth('post:actors')
+def create_actor(payload):
     body = request.get_json()
 
     req_name = body.get('name', None)
@@ -87,8 +88,8 @@ def create_actor():
 
 
 @actor_blueprint.route('/api/actors/<int:id>', methods=["PATCH"])
-# @requires_auth('patch:actors')
-def update_actor(id):
+@requires_auth('patch:actors')
+def update_actor(payload, id):
     a = Actor.query.get_or_404(id)
 
     try:
@@ -120,8 +121,8 @@ def update_actor(id):
 
 
 @actor_blueprint.route('/api/actors/<int:id>', methods=["DELETE"])
-# @requires_auth('delete:actors')
-def delete_actors(id):
+@requires_auth('delete:actors')
+def delete_actors(payload, id):
     a = Actor.query.get_or_404(id)
 
     try:
