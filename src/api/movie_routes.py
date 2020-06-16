@@ -1,5 +1,6 @@
 from flask import Blueprint, request, abort, jsonify
 
+from ..auth.auth import requires_auth
 from ..database.models import Movie
 
 movie_blueprint = Blueprint('movie_blueprint', __name__)
@@ -11,8 +12,8 @@ movie_blueprint = Blueprint('movie_blueprint', __name__)
 
 
 @movie_blueprint.route('/api/movies', methods=['GET'])
-# @requires_auth('get:movies')
-def movies():
+@requires_auth('get:movies')
+def movies(payload):
     # TODO - add pagination
     all_movies = Movie.query.order_by(Movie.release_date.desc()).all()
 
@@ -28,8 +29,8 @@ def movies():
 
 
 @movie_blueprint.route('/api/movies/<int:id>/details', methods=['GET'])
-# @requires_auth('get:movies')
-def movie_details(id):
+@requires_auth('get:movies')
+def movie_details(payload, id):
     m = Movie.query.get_or_404(id)
 
     return jsonify({
@@ -39,8 +40,8 @@ def movie_details(id):
 
 
 @movie_blueprint.route('/api/movies', methods=['POST'])
-# @requires_auth('post:movies')
-def create_movie():
+@requires_auth('post:movies')
+def create_movie(payload):
     body = request.get_json()
 
     req_title = body.get('title', None)
@@ -79,8 +80,8 @@ def create_movie():
 
 
 @movie_blueprint.route('/api/movies/<int:id>', methods=["PATCH"])
-# @requires_auth('patch:movies')
-def update_movie(id):
+@requires_auth('patch:movies')
+def update_movie(payload, id):
     m = Movie.query.get_or_404(id)
 
     try:
@@ -105,8 +106,8 @@ def update_movie(id):
 
 
 @movie_blueprint.route('/api/movies/<int:id>', methods=["DELETE"])
-# @requires_auth('delete:movies')
-def delete_movie(id):
+@requires_auth('delete:movies')
+def delete_movie(payload, id):
     m = Movie.query.get_or_404(id)
 
     try:

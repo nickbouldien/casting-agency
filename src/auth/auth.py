@@ -84,7 +84,7 @@ def check_permissions(permission, payload):
     if permission not in payload['permissions']:
         raise AuthError({
             'code': 'permissions_payload',
-            'description': 'Payload does not contain the "permissions" string.'
+            'description': 'The required permission was not found in the "permissions" array.'
         }, 403)
 
     return True
