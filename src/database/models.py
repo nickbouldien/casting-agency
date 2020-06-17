@@ -1,3 +1,5 @@
+from sqlalchemy.orm import validates
+
 from . import db
 
 
@@ -52,6 +54,20 @@ class Actor(db.Model):
     phone = db.Column(db.String(120), nullable=True)
     image_link = db.Column(db.String(500), nullable=True)
     website = db.Column(db.String(120), nullable=True)
+
+    @validates('age')
+    def validate_age(self, key, age):
+        if type(age) is str:
+            try:
+                age = int(age)
+            except Exception as e:
+                print('error casting the age to an int ', e)
+                raise AssertionError('The age value could not be cast into an integer')
+
+        if age < 0:
+            raise AssertionError('Age should an integer > 0')
+
+        return age
 
     def short(self):
         return {

@@ -23,4 +23,3 @@ if __name__ == '__main__':
     print(f'director_bearer_token => {director_bearer_token}')
     print(f'producer_bearer_token => {producer_bearer_token}')
     print('---------------')
-    print('---------------')

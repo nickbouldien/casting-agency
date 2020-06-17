@@ -9,10 +9,9 @@ AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN', '')
 ALGORITHM = os.environ.get('ALGORITHM', '')
 API_AUDIENCE = os.environ.get('AUDIENCE', '')
 
-# AuthError Exception
 '''
 AuthError Exception
-A standardized way to communicate auth failure modes
+A standardized way to communicate auth failures
 '''
 
 
@@ -24,7 +23,6 @@ class AuthError(Exception):
 
 def get_token_auth_header():
     auth = request.headers.get('Authorization', None)
-    print()
     if not auth:
         raise AuthError({
             'code': 'authorization_header_missing',
@@ -152,7 +150,6 @@ def verify_decode_jwt(token):
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
             }, 401)
         except Exception as e:
-            print('invalid_header => ', e)
             raise AuthError({
                 'code': 'invalid_header',
                 'description': 'Unable to parse authentication token.'
@@ -169,11 +166,8 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
-            print("token ", token)
 
             payload = verify_decode_jwt(token)
-
-            print("payload ", payload)
 
             check_permissions(permission, payload)
 

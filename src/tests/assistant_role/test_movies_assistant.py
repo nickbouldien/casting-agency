@@ -1,6 +1,5 @@
 import json
 import unittest
-from src.database.models import Movie
 from src.tests.test_setup import SetupTestCase
 
 
