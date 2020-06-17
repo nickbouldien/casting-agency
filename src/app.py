@@ -13,21 +13,20 @@ from .error_handlers import errors_blueprint
 def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
-    # CORS(app)
+    # for now, allowing everybody to call the api. obviously this could/should be restricted
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     moment = Moment(app)
+
+    app.register_blueprint(actor_blueprint)
+    app.register_blueprint(movie_blueprint)
+
+    # register the custom error handlers
+    app.register_blueprint(errors_blueprint)
 
     return app
 
 
 APP = create_app()
-
-# attach the routes/endpoints to the app
-APP.register_blueprint(actor_blueprint)
-APP.register_blueprint(movie_blueprint)
-
-# register the custom error handlers
-APP.register_blueprint(errors_blueprint)
 
 
 # /ping route to check if the api is running

@@ -17,14 +17,8 @@ class SetupTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
 
-        # register the routes/endpoints and error handlers
-        self.app.register_blueprint(actor_blueprint)
-        self.app.register_blueprint(movie_blueprint)
-        self.app.register_blueprint(errors_blueprint)
-
         self.client = self.app.test_client()
 
-        # TODO - which config settings are needed for testing??
         self.app.testing = True
         self.app.config['TESTING'] = True
 
