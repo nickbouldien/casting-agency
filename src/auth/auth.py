@@ -1,13 +1,13 @@
-from flask import request, _request_ctx_stack, abort
+import os
+from flask import request
 from functools import wraps
 import json
 from jose import jwt
 from urllib.request import urlopen
 
-# TODO - move these to env vars
-AUTH0_DOMAIN = 'dev-coffee-shop1.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'casting-agency'
+AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN', '')
+ALGORITHM = os.environ.get('ALGORITHM', '')
+API_AUDIENCE = os.environ.get('AUDIENCE', '')
 
 # AuthError Exception
 '''
@@ -24,7 +24,7 @@ class AuthError(Exception):
 
 def get_token_auth_header():
     auth = request.headers.get('Authorization', None)
-
+    print()
     if not auth:
         raise AuthError({
             'code': 'authorization_header_missing',
@@ -56,19 +56,16 @@ def get_token_auth_header():
 
 '''
     @INPUTS
-        permission: string permission (i.e. 'post:drink')
+        permission: string permission (i.e. 'post:movie')
         payload: decoded jwt payload
 
-    it should raise an AuthError if permissions are not included in the payload
-    it should raise an AuthError if the requested permission string is not in the payload permissions array
+    raises an AuthError if permissions are not included in the payload
+    raises an AuthError if the requested permission string is not in the payload permissions array
     return true otherwise
 '''
 
 
 def check_permissions(permission, payload):
-    print("check_permissions ", permission)
-    print("check_permissions ", payload)
-
     if payload is None:
         raise AuthError({
             'code': 'No_payload',
@@ -84,7 +81,7 @@ def check_permissions(permission, payload):
     if permission not in payload['permissions']:
         raise AuthError({
             'code': 'permissions_payload',
-            'description': 'Payload does not contain the "permissions" string.'
+            'description': 'The required permission was not found in the "permissions" array.'
         }, 403)
 
     return True
@@ -92,13 +89,12 @@ def check_permissions(permission, payload):
 
 '''
     @INPUTS
-        token: a json web token (string)
+        token: a json web token (string) - Auth0 token with key id
 
-    it should be an Auth0 token with key id (kid)
-    it should verify the token using Auth0 /.well-known/jwks.json
-    it should decode the payload from the token
-    it should validate the claims
-    return the decoded payload
+    1 - verify the token using Auth0 /.well-known/jwks.json
+    2 - decode the payload from the token
+    3 - validate the claims
+    4 - return the decoded payload
 
     !!NOTE urlopen has a common certificate error described here: https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
@@ -132,13 +128,12 @@ def verify_decode_jwt(token):
 
     # Finally, verify!!!
     if rsa_key:
-        print("rsa_key ", rsa_key)
         try:
             # USE THE KEY TO VALIDATE THE JWT
             payload = jwt.decode(
                 token,
                 rsa_key,
-                algorithms=ALGORITHMS,
+                algorithms=ALGORITHM,
                 audience=API_AUDIENCE,
                 issuer='https://' + AUTH0_DOMAIN + '/'
             )
@@ -156,7 +151,8 @@ def verify_decode_jwt(token):
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
             }, 401)
-        except Exception:
+        except Exception as e:
+            print('invalid_header => ', e)
             raise AuthError({
                 'code': 'invalid_header',
                 'description': 'Unable to parse authentication token.'
@@ -173,8 +169,11 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
+            print("token ", token)
 
             payload = verify_decode_jwt(token)
+
+            print("payload ", payload)
 
             check_permissions(permission, payload)
 
