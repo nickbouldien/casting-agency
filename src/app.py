@@ -1,12 +1,13 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_moment import Moment
-from .database import setup_db
-from .error_handlers import errors_blueprint
+
 from .api.actor_routes import actor_blueprint
 from .api.movie_routes import movie_blueprint
-
+from .database import setup_db
 from .database.config import environment
+from .error_handlers import errors_blueprint
+
 
 # def create_app(config_class=Config):  # TODO - check into the config for the app
 def create_app(test_config=None):
