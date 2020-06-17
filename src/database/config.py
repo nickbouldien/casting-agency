@@ -1,21 +1,14 @@
 import os
 
-test = "casting_agency_test"
-dev = "casting_agency_dev"
-# TODO - get prod db path from heroku
-prod = ""
+DATABASE_URL = os.environ.get('DATABASE_URL', None)
 
 environment = os.environ.get('FLASK_ENV', 'production')
 print("*** environment *** => ", environment)
 
-if environment == "test":
-    database_name = test
-elif environment == "development":
-    database_name = dev
-else:
-    database_name = prod
+if DATABASE_URL is None:
+    raise Exception("the database url cannot be empty. check the `DATABASE_URL` environment variable")
 
-SQLALCHEMY_DATABASE_URI = f'postgresql://nick@localhost:5432/{database_name}'
+SQLALCHEMY_DATABASE_URI = DATABASE_URL
 print("SQLALCHEMY_DATABASE_URI: ", SQLALCHEMY_DATABASE_URI)
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
