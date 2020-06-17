@@ -4,6 +4,7 @@ from src.app import create_app
 from src.database import setup_db
 import json
 
+from .config import assistant_header, director_header, producer_header
 from ..error_handlers import errors_blueprint
 from ..api.actor_routes import actor_blueprint
 from ..api.movie_routes import movie_blueprint
@@ -28,10 +29,6 @@ class SetupTestCase(unittest.TestCase):
         self.app.config['TESTING'] = True
 
         setup_db(self.app)
-
-        # binds the app to the current context
-        # ctx = self.app.app_context()
-        # ctx.push()
 
         # basic setup for use in other tests
         self.movie = {
@@ -65,6 +62,10 @@ class SetupTestCase(unittest.TestCase):
             'phone': "987654321",
             'website': "https://www.example.com/joe"
         }
+
+        self.assistant_header = assistant_header
+        self.director_header = director_header
+        self.producer_header = producer_header
 
         with self.app.app_context():
             self.db = SQLAlchemy()

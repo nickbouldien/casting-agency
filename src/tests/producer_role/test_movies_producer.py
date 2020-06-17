@@ -4,13 +4,13 @@ from src.database.models import Movie
 from src.tests.test_setup import SetupTestCase
 
 
-class MoviesTestCase(SetupTestCase):
-    """This class represents the movie test cases"""
+class MoviesTestCaseProducer(SetupTestCase):
+    """This class represents the movie test cases for the producer role"""
 
     # GET '/api/movies'
     def test_get_paginated_movies(self):
         """Tests movies success"""
-        response = self.client.get('/api/movies')
+        response = self.client.get('/api/movies', headers=self.producer_header)
 
         data = json.loads(response.data)
 
@@ -21,28 +21,12 @@ class MoviesTestCase(SetupTestCase):
         self.assertTrue(len(data['movies']))
         self.assertTrue(data['total_movies'])
 
-    # TODO - implement once pagination is added
-    # GET '/api/movies'
-    # def test_404_invalid_page(self):
-    #     """Tests that the movies endpoint pagination failure results in a 404"""
-    #
-    #     invalid_page_number = 1000
-    #
-    #     response = self.client.get(f'/api/movies?page={invalid_page_number}')
-    #
-    #     data = json.loads(response.data)
-    #
-    #     # check status code and message
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(data['message'], 'Not found')
-    #     self.assertEqual(data['success'], False)
-
     # GET '/api/movies/<id>/details'
     def test_movie_details_success(self):
         """Tests the movie details endpoint success"""
         movie_id = 1
 
-        response = self.client.get(f'/api/movies/{movie_id}/details')
+        response = self.client.get(f'/api/movies/{movie_id}/details', headers=self.producer_header)
 
         data = json.loads(response.data)
 
@@ -54,7 +38,7 @@ class MoviesTestCase(SetupTestCase):
         """Tests the movie details endpoint 404"""
         movie_id = 10000
 
-        response = self.client.get(f'/api/movies/{movie_id}/details')
+        response = self.client.get(f'/api/movies/{movie_id}/details', headers=self.producer_header)
 
         data = json.loads(response.data)
 
@@ -69,7 +53,7 @@ class MoviesTestCase(SetupTestCase):
         # get all movies before new movie creation
         all_movies = Movie.query.all()
 
-        response = self.client.post('/api/movies', json=self.movie)
+        response = self.client.post('/api/movies', json=self.movie, headers=self.producer_header)
         data = json.loads(response.data)
 
         # check status code / message
@@ -96,7 +80,7 @@ class MoviesTestCase(SetupTestCase):
 
         invalid_data = {}
 
-        response = self.client.post('/api/movies', json=invalid_data)
+        response = self.client.post('/api/movies', json=invalid_data, headers=self.producer_header)
         data = json.loads(response.data)
 
         # get number of movies after api call
@@ -125,7 +109,7 @@ class MoviesTestCase(SetupTestCase):
         movie_id = movie.id
 
         # try to delete the movie
-        response = self.client.delete(f'/api/movies/{movie_id}')
+        response = self.client.delete(f'/api/movies/{movie_id}', headers=self.producer_header)
         data = json.loads(response.data)
 
         # check the status code / message
@@ -148,7 +132,7 @@ class MoviesTestCase(SetupTestCase):
         random_movie_id = 200000
 
         # try to delete the movie
-        response = self.client.delete(f'/api/movies/{random_movie_id}')
+        response = self.client.delete(f'/api/movies/{random_movie_id}', headers=self.producer_header)
         data = json.loads(response.data)
 
         # check the status code / message
@@ -167,7 +151,7 @@ class MoviesTestCase(SetupTestCase):
             'website': "http://www.updated-website-link.com"
         }
 
-        response = self.client.patch(f'/api/movies/{movie_id}', json=update_data)
+        response = self.client.patch(f'/api/movies/{movie_id}', json=update_data, headers=self.producer_header)
         data = json.loads(response.data)
 
         # check the status code / message
@@ -191,7 +175,7 @@ class MoviesTestCase(SetupTestCase):
             'releaseDate': "invalid date"
         }
 
-        response = self.client.patch(f'/api/movies/{movie_id}', json=update_data)
+        response = self.client.patch(f'/api/movies/{movie_id}', json=update_data, headers=self.producer_header)
         data = json.loads(response.data)
 
         # check the status code / message

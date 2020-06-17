@@ -4,13 +4,17 @@ from src.database.models import Actor
 from src.tests.test_setup import SetupTestCase
 
 
-class ActorsTestCase(SetupTestCase):
-    """This class represents the actors test cases"""
+class ActorsTestCaseProducer(SetupTestCase):
+    """This class represents the actors test cases for the producer role"""
 
     # GET '/api/actors'
     def test_get_paginated_actors(self):
         """Tests actors success"""
-        response = self.client.get('/api/actors')
+        response = self.client.get('/api/actors', headers=self.producer_header)
+
+        # print("self.assistant_header", self.assistant_header)
+        # print("self.director_header", self.director_header)
+        print("self.producer_header", self.producer_header)
 
         data = json.loads(response.data)
 
@@ -42,7 +46,7 @@ class ActorsTestCase(SetupTestCase):
         """Tests the actor details endpoint success"""
         actor_id = 1
 
-        response = self.client.get(f'/api/actors/{actor_id}/details')
+        response = self.client.get(f'/api/actors/{actor_id}/details', headers=self.producer_header)
 
         data = json.loads(response.data)
 
@@ -54,7 +58,7 @@ class ActorsTestCase(SetupTestCase):
         """Tests the actor details endpoint 404"""
         actor_id = 10000
 
-        response = self.client.get(f'/api/actors/{actor_id}/details')
+        response = self.client.get(f'/api/actors/{actor_id}/details', headers=self.producer_header)
 
         data = json.loads(response.data)
 
@@ -69,7 +73,7 @@ class ActorsTestCase(SetupTestCase):
         # get all actors before new actor creation
         all_actors = Actor.query.all()
 
-        response = self.client.post('/api/actors', json=self.actor)
+        response = self.client.post('/api/actors', json=self.actor, headers=self.producer_header)
         data = json.loads(response.data)
 
         # check status code / message
@@ -96,7 +100,7 @@ class ActorsTestCase(SetupTestCase):
 
         invalid_data = {}
 
-        response = self.client.post('/api/actors', json=invalid_data)
+        response = self.client.post('/api/actors', json=invalid_data, headers=self.producer_header)
         data = json.loads(response.data)
 
         # get number of actors after api call
@@ -126,7 +130,7 @@ class ActorsTestCase(SetupTestCase):
         actor_id = actor.id
 
         # try to delete the actor
-        response = self.client.delete(f'/api/actors/{actor_id}')
+        response = self.client.delete(f'/api/actors/{actor_id}', headers=self.producer_header)
         data = json.loads(response.data)
 
         # check the status code / message
@@ -149,7 +153,7 @@ class ActorsTestCase(SetupTestCase):
         random_actor_id = 200000
 
         # try to delete the actor
-        response = self.client.delete(f'/api/actors/{random_actor_id}')
+        response = self.client.delete(f'/api/actors/{random_actor_id}', headers=self.producer_header)
         data = json.loads(response.data)
 
         # check the status code / message
@@ -167,7 +171,7 @@ class ActorsTestCase(SetupTestCase):
             'website': "http://www.updated-website-link.com/actor"
         }
 
-        response = self.client.patch(f'/api/actors/{actor_id}', json=update_data)
+        response = self.client.patch(f'/api/actors/{actor_id}', json=update_data, headers=self.producer_header)
         data = json.loads(response.data)
 
         # check the status code / message
@@ -190,7 +194,7 @@ class ActorsTestCase(SetupTestCase):
             'age': -47
         }
 
-        response = self.client.patch(f'/api/actors/{actor_id}', json=update_data)
+        response = self.client.patch(f'/api/actors/{actor_id}', json=update_data, headers=self.producer_header)
         data = json.loads(response.data)
 
         # check the status code / message
