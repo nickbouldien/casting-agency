@@ -6,6 +6,7 @@ from .error_handlers import errors_blueprint
 from .api.actor_routes import actor_blueprint
 from .api.movie_routes import movie_blueprint
 
+from .database.config import environment
 
 # def create_app(config_class=Config):  # TODO - check into the config for the app
 def create_app(test_config=None):
@@ -28,18 +29,21 @@ APP.register_blueprint(movie_blueprint)
 APP.register_blueprint(errors_blueprint)
 
 
-@APP.route('/', methods=['GET'])
+# /ping route to check if the api is running
+@APP.route('/ping', methods=['GET'])
 def index():
     return jsonify({
         'success': True,
-        'message': "GET - app index route"
+        'message': "pong"
     })
 
 
-# for rule in APP.url_map.iter_rules():
-#     print("rule: ", rule)
-
 if __name__ == '__main__':
-    # TODO
-    # APP.run()
-    APP.run(host='0.0.0.0', port=8080, debug=True)
+    if environment in ["development", "test"]:
+        # run on port 8080 and turn on debug mode
+        print(f"app.py - running in {environment} mode on port 8080")
+        APP.run(host='0.0.0.0', port=8080, debug=True)
+    else:
+        print("app.py - running in production mode")
+        APP.run()
+

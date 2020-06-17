@@ -67,7 +67,7 @@ producer_header = {"Authorization": f"Bearer {producer_bearer_token}"}
 if __name__ == '__main__':
     print('---------------')
     print('tests/config.py')
-    # print(f'domain: {domain}')
     print(f'assistant_bearer_token => {assistant_bearer_token}')
     print(f'director_bearer_token => {director_bearer_token}')
     print(f'producer_bearer_token => {producer_bearer_token}')
+    print('---------------')
