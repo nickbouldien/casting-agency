@@ -48,8 +48,8 @@ $ python3 -m unittest -v test_app.py
 ```
 
 
-## API Endpoints
-### Overview
+### API Endpoints
+#### Overview
   * GET
     * /actors
     * /movies
@@ -67,16 +67,16 @@ $ python3 -m unittest -v test_app.py
     * /actors/{int:actor_id}
     * /movies/{int:movie_id}
 
-### Detailed Information / Examples
+#### Detailed Information / Examples
 
-#### generic endpoints
-##### GET /ping
+##### generic endpoints
+###### GET /ping
 * General:
   * an endpoint strictly used as a health check (make sure the app is up and running)
 * Example: `curl https://casting-agency-1.herokuapp.com/ping`
 
-#### movie endpoints
-##### GET /api/movies
+##### movie endpoints
+###### GET /api/movies
 * General:
   * Get a list of all movies
   * RBAC: Assistant, Director, Producer
@@ -87,7 +87,7 @@ curl --request GET \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
-##### GET /api/movies/{int:movie_id}/details
+###### GET /api/movies/{int:movie_id}/details
 * General:
   * Get detailed information about a movie
   * RBAC: Assistant, Director, Producer 
@@ -98,7 +98,7 @@ curl --request GET \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
-##### POST /api/movies
+###### POST /api/movies
 * General:
   * create a new movie
   * RBAC: Producer 
@@ -115,7 +115,7 @@ curl --request POST \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
-##### PATCH /api/movies/{int:movie_id}
+###### PATCH /api/movies/{int:movie_id}
 * General:
   * update a movie
   * RBAC: Director, Producer
@@ -130,7 +130,7 @@ curl --request PATCH \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
-##### DELETE /api/movies/{int:movie_id}
+###### DELETE /api/movies/{int:movie_id}
 * General:
   * delete a movie
   * RBAC: Producer 
@@ -142,8 +142,8 @@ curl --request DELETE \
 ```
 
 
-#### actor endpoints
-##### GET /api/actors
+##### actor endpoints
+###### GET /api/actors
 * General:
   * Get a list of all actors
   * RBAC: Assistant, Director, Producer 
@@ -154,7 +154,7 @@ curl --request GET \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
-##### GET /api/actors/{int:actor_id}/details
+###### GET /api/actors/{int:actor_id}/details
 * General:
   * Get detailed information about an actor
   * RBAC: Assistant, Director, Producer 
@@ -165,7 +165,7 @@ curl --request GET \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
-##### POST /api/actors
+###### POST /api/actors
 * General:
   * create a new actor
   * RBAC: Director, Producer 
@@ -184,7 +184,7 @@ curl --request POST \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
-##### PATCH /api/actors/{int:actor_id}
+###### PATCH /api/actors/{int:actor_id}
 * General:
   * update an actor
   * RBAC: Director, Producer
@@ -199,7 +199,7 @@ curl --request PATCH \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
-##### DELETE /api/actors/{int:actor_id}
+###### DELETE /api/actors/{int:actor_id}
 * General:
   * delete an actor
   * RBAC: Director, Producer 
@@ -228,7 +228,7 @@ the producer can:
 get/create/update/delete the actors, get/create/update/delete the movies
 
 
-### hosting directions
+### Hosting Directions
 the app is hosted on heroku
 
 #### Create the app
