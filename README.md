@@ -68,6 +68,7 @@ $ python3 -m unittest -v test_app.py
     * /movies/{int:movie_id}
 
 #### Detailed Information / Examples
+more information about the endpoints with environments for dev (local) and prod can be found in the [postman collection](./src/docs/casting_agency.postman_collection.json)
 
 ##### generic endpoints
 ###### GET /ping
