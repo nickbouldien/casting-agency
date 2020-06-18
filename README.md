@@ -2,7 +2,7 @@
 Capstone project
 
 ## Development Setup
-using Python 3.7.x (actual version needed for deployment to heroku can be found in [./runtime.txt](runtime.txt))
+using Python 3.7.x (actual version needed for deployment to heroku can be found in [runtime.txt](runtime.txt))
 
 ### Virtual Environment
 ```bash
@@ -206,13 +206,13 @@ curl --request PATCH \
 * Example:
 ```bash
 curl --request DELETE \
-  --url https://casting-agency-1.herokuapp.com/api/actor/1 \
+  --url https://casting-agency-1.herokuapp.com/api/actors/1 \
   --header "authorization: Bearer ${BEARER_TOKEN}"
 ```
 
 
-## Authentication and RBAC information
-### roles
+### Authentication and RBAC information
+#### roles
 There are three roles:
 - assistant
 - director
@@ -231,23 +231,23 @@ get/create/update/delete the actors, get/create/update/delete the movies
 ### hosting directions
 the app is hosted on heroku
 
-##### Create the app
+#### Create the app
 heroku create casting-agency-1
 
-##### Add git remote for Heroku to the local repository (if needed)
+#### Add git remote for Heroku to the local repository (if needed)
 git remote add heroku https://git.heroku.com/casting-agency-1.git
 
-##### Add postgresql add on for the database
+#### Add postgresql add on for the database
 heroku addons:create heroku-postgresql:hobby-dev --app casting-agency-1
 
-##### check the app config
+#### check the app config
 heroku config --app casting-agency-1
 
-##### add env vars on heroku
+#### add env vars on heroku
 heroku dashboard -> settings -> config vars
 
-##### push to heroku
+#### push to heroku
 git push heroku master
 
-##### run db migrations
+#### run db migrations
 heroku run python manage.py db upgrade --app casting-agency-1 --directory src/migrations/
