@@ -25,22 +25,6 @@ class ActorsTestCaseProducer(SetupTestCase):
         self.assertTrue(len(data['actors']))
         self.assertTrue(data['total_actors'])
 
-    # TODO - implement once pagination is added
-    # GET '/api/actors'
-    # def test_404_invalid_page(self):
-    #     """Tests that the actors endpoint pagination failure results in a 404"""
-    #
-    #     invalid_page_number = 1000
-    #
-    #     response = self.client.get(f'/api/actors?page={invalid_page_number}')
-    #
-    #     data = json.loads(response.data)
-    #
-    #     # check status code and message
-    #     self.assertEqual(response.status_code, 404)
-    #     self.assertEqual(data['message'], 'Not found')
-    #     self.assertEqual(data['success'], False)
-
     # GET '/api/actors/<id>/details'
     def test_actor_details_success(self):
         """Tests the actor details endpoint success"""

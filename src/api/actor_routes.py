@@ -52,10 +52,6 @@ def create_actor(payload):
         print('req_name is required')
         abort(422, 'req_name is required')
 
-    valid_age = check_valid_age(req_age)
-    if not valid_age:
-        abort(422, 'age must be an integer larger than 0')
-
     if req_gender is None or req_gender == "":
         print('req_gender is required')
         abort(422, "req_gender is required")
@@ -78,13 +74,12 @@ def create_actor(payload):
             "success": True,
             "actor_id": actor.id
         })
+    except AssertionError as exception_message:
+        print("AssertionError -> ", exception_message)
+        abort(422, 'age must be an integer larger than 0')
     except Exception as e:
         print("POST /actors error => ", e)
-
-        return jsonify({
-            'success': False,
-            'message': "The actor is not formatted correctly. Please try again."
-        }), 422
+        abort(422, 'The actor is not formatted correctly. Please try again.')
 
 
 @actor_blueprint.route('/api/actors/<int:id>', methods=["PATCH"])

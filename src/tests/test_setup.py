@@ -2,12 +2,8 @@ import unittest
 from flask_sqlalchemy import SQLAlchemy
 from src.app import create_app
 from src.database import setup_db
-import json
 
 from .config import assistant_header, director_header, producer_header
-from ..error_handlers import errors_blueprint
-from ..api.actor_routes import actor_blueprint
-from ..api.movie_routes import movie_blueprint
 
 
 class SetupTestCase(unittest.TestCase):
